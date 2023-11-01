@@ -34,8 +34,6 @@ const verifyToken = async (req, res, next) => {
     req.user = decoded;
     next();
   });
-  console.log("token", token);
-  next();
 };
 
 // const verifyToken = async (req, res, next) => {
@@ -138,6 +136,11 @@ async function run() {
     //booking
     app.get("/book", verifyToken, async (req, res) => {
       console.log(req.query.email);
+      console.log("token owner info", req.user);
+
+      if (req?.user?.email !== req?.query?.email) {
+        return res.status(403).send({ message: "forbidden" });
+      }
 
       let query = {};
       if (req.query?.email) {
